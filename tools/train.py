@@ -11,7 +11,7 @@ from mmcv import Config, DictAction
 from mmcv.runner import get_dist_info, init_dist, set_random_seed
 from mmcv.utils import get_git_hash
 
-# from mmaction import __version__
+from mmaction import __version__
 from mmaction.apis import train_model
 from mmaction.datasets import build_dataset
 from mmaction.models import build_model
@@ -180,7 +180,7 @@ def main():
         # save mmaction version, config file content and class names in
         # checkpoints as meta data
         cfg.checkpoint_config.meta = dict(
-            mmaction_version=get_git_hash(digits=7),
+            mmaction_version=__version__ + get_git_hash(digits=7),
             config=cfg.pretty_text)
 
     ## freeze some parameters
