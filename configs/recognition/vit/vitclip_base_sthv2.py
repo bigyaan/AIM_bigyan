@@ -12,9 +12,9 @@ model = dict(
 dataset_type = 'VideoDataset'
 data_root = '/kaggle/working/AIM_bigyan/data/data/sthv2/test'
 data_root_val = '/kaggle/working/AIM_bigyan/data/data/sthv2/test'
-ann_file_train = '/kaggle/working/AIM_bigyan/data/data/sthv2/test/test_video_list.txt'
-ann_file_val = '/kaggle/working/AIM_bigyan/data/data/sthv2/test/test_video_list.txt'
-ann_file_test = '/kaggle/working/AIM_bigyan/data/data/sthv2/test/test_video_list.txt'
+ann_file_train = '/kaggle/working/AIM_bigyan/data/data/sthv2/test_video_list.txt'
+ann_file_val = '/kaggle/working/AIM_bigyan/data/data/sthv2/test_video_list.txt'
+ann_file_test = '/kaggle/working/AIM_bigyan/data/data/sthv2/test_video_list.txt'
 img_norm_cfg = dict(
     mean=[122.769, 116.74, 104.04], std=[68.493, 66.63, 70.321], to_bgr=False)
 train_pipeline = [
