@@ -13,7 +13,7 @@ from ..datasets import build_dataloader, build_dataset
 from ..utils import PreciseBNHook, get_root_logger
 from .test import multi_gpu_test
 from mmcv_custom.runner import EpochBasedRunnerAmp
-import apex
+# import apex
 import os.path as osp
 
 

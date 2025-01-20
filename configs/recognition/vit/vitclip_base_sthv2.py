@@ -10,11 +10,11 @@ model = dict(
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/sthv2/videos'
-data_root_val = 'data/sthv2/videos'
-ann_file_train = 'data/sthv2/sthv2_train_list_videos.txt'
-ann_file_val = 'data/sthv2/sthv2_val_list_videos.txt'
-ann_file_test = 'data/sthv2/sthv2_val_list_videos.txt'
+data_root = '/content/drive/MyDrive/AIM/data/data/sthv2/test'
+data_root_val = '/content/drive/MyDrive/AIM/data/data/sthv2/test'
+ann_file_train = '/content/drive/MyDrive/AIM/data/data/sthv2/test_video_list.txt'
+ann_file_val = '/content/drive/MyDrive/AIM/data/data/sthv2/test_video_list.txt'
+ann_file_test = '/content/drive/MyDrive/AIM/data/data/sthv2/test_video_list.txt'
 img_norm_cfg = dict(
     mean=[122.769, 116.74, 104.04], std=[68.493, 66.63, 70.321], to_bgr=False)
 train_pipeline = [
@@ -69,8 +69,8 @@ test_pipeline = [
     dict(type='ToTensor', keys=['imgs'])
 ]
 data = dict(
-    videos_per_gpu=8,
-    workers_per_gpu=2,
+    videos_per_gpu=1,
+    workers_per_gpu=1,
     val_dataloader=dict(
         videos_per_gpu=1,
         workers_per_gpu=1
@@ -122,12 +122,12 @@ find_unused_parameters = False
 
 
 # do not use mmdet version fp16
-fp16 = None
-optimizer_config = dict(
-    type="DistOptimizerHook",
-    update_interval=1,
-    grad_clip=None,
-    coalesce=True,
-    bucket_size_mb=-1,
-    use_fp16=True,
-)
+# fp16 = None
+# optimizer_config = dict(
+#     type="DistOptimizerHook",
+#     update_interval=1,
+#     grad_clip=None,
+#     coalesce=True,
+#     bucket_size_mb=-1,
+#     use_fp16=True,
+# )

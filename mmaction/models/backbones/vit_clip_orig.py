@@ -62,9 +62,6 @@ class ResidualAttentionBlock(nn.Module):
 
         self.MLP_Adapter = Adapter(d_model, skip_connect=False)
         self.S_Adapter = Adapter(d_model)
-        self.I_Adapter = Adapter(d_model)
-        self.O_Adapter = Adapter(d_model)
-
         self.scale = scale
         self.T_Adapter = Adapter(d_model, skip_connect=False)
         if num_tadapter == 2:
@@ -76,10 +73,9 @@ class ResidualAttentionBlock(nn.Module):
         self.attn_mask = self.attn_mask.to(dtype=x.dtype, device=x.device) if self.attn_mask is not None else None
         return self.attn(x, x, x, need_weights=False, attn_mask=self.attn_mask)[0]
 
-    def forward(self, t):
+    def forward(self, x: torch.Tensor):
         ## x shape [HW+1, BT, D]
-        x = t[0]
-        print("x",x)
+        # print("x",x)
         n, bt, d = x.shape
         ## temporal adaptation
         xt = rearrange(x, 'n (b t) d -> t (b n) d', t=self.num_frames)
@@ -89,19 +85,12 @@ class ResidualAttentionBlock(nn.Module):
             xt = self.T_Adapter(self.attention(self.ln_1(xt)))
         xt = rearrange(xt, 't (b n) d -> n (b t) d', n=n)
         x = x + self.drop_path(xt)
-        spatial = self.S_Adapter(self.attention(self.ln_1(x)))
-        i=self.I_Adapter(spatial)
-        t=self.O_Adapter(spatial)
-        x = x +spatial
-
         ## spatial adaptation
-        # x = x + self.S_Adapter(self.attention(self.ln_1(x)))
+        x = x + self.S_Adapter(self.attention(self.ln_1(x)))
         ## joint adaptation
         xn = self.ln_2(x)
         x = x + self.mlp(xn) + self.drop_path(self.scale * self.MLP_Adapter(xn))
-        print("x end")
-        return x,i,t
-        # return x
+        return x
 
 
 class Transformer(nn.Module):
@@ -113,7 +102,6 @@ class Transformer(nn.Module):
         self.resblocks = nn.Sequential(*[ResidualAttentionBlock(width, heads, attn_mask, scale, num_tadapter, num_frames, dpr[i]) for i in range(layers)])
 
     def forward(self, x: torch.Tensor):
-        x=(x,0,0)
         return self.resblocks(x)
 
 
