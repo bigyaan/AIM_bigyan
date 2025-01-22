@@ -79,7 +79,7 @@ class ResidualAttentionBlock(nn.Module):
     def forward(self, t):
         ## x shape [HW+1, BT, D]
         x = t[0]
-        print("x",x)
+        # print("x",x)
         n, bt, d = x.shape
         ## temporal adaptation
         xt = rearrange(x, 'n (b t) d -> t (b n) d', t=self.num_frames)
@@ -99,7 +99,7 @@ class ResidualAttentionBlock(nn.Module):
         ## joint adaptation
         xn = self.ln_2(x)
         x = x + self.mlp(xn) + self.drop_path(self.scale * self.MLP_Adapter(xn))
-        print("x end")
+        # print("x end")
         return x,i,t
         # return x
 
