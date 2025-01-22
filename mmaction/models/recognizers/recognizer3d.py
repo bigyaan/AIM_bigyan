@@ -15,9 +15,7 @@ class Recognizer3D(BaseRecognizer):
         assert self.with_cls_head
         imgs = imgs.reshape((-1, ) + imgs.shape[2:])
         losses = dict()
-        print("//////////////////////////////////////////////////////////////////////////////////\n\n\n",imgs)
-        print("//////////////////////////////////\n\n\n",type(imgs))
-
+        
         x = self.extract_feat(imgs)
         if self.with_neck:
             x, loss_aux = self.neck(x, labels.squeeze())
