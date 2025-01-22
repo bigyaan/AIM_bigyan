@@ -213,7 +213,7 @@ class ViT_CLIP(nn.Module):
         x = rearrange(x, 'b c t h w -> (b t) c h w')
         x = self.conv1(x)  
         x = x.reshape(x.shape[0], x.shape[1], -1) 
-        print("tensor",x)
+        print("tensor",type(x))
         x = x.permute(0, 2, 1)
         x = torch.cat([self.class_embedding.to(x.dtype) + torch.zeros(x.shape[0], 1, x.shape[-1], dtype=x.dtype, device=x.device), x], dim=1)
         x = x + self.positional_embedding.to(x.dtype)
