@@ -21,9 +21,14 @@ class Recognizer3D(BaseRecognizer):
             x, loss_aux = self.neck(x, labels.squeeze())
             losses.update(loss_aux)
 
-        cls_score = self.cls_head(x)
-        gt_labels = labels.squeeze()
-        loss_cls = self.cls_head.loss(cls_score, gt_labels, **kwargs)
+        cls_score,I_score,t_score = self.cls_head(x)
+        gt_labels_x = labels[0].squeeze()
+        gt_labels_i = labels[1].squeeze()
+        gt_labels_t= labels[2].squeeze()
+        loss_cls_x = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
+        loss_cls_i = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
+        loss_cls_t = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
+        loss_cls=(loss_cls_x,loss_cls_i,loss_cls_t)
         losses.update(loss_cls)
 
         return losses
