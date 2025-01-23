@@ -94,12 +94,19 @@ class ResidualAttentionBlock(nn.Module):
         t=self.O_Adapter(spatial)
         x = x +spatial
 
+
         ## spatial adaptation
         # x = x + self.S_Adapter(self.attention(self.ln_1(x)))
         ## joint adaptation
         xn = self.ln_2(x)
         x = x + self.mlp(xn) + self.drop_path(self.scale * self.MLP_Adapter(xn))
         # print("x end")
+        ni=self.ln_2(i)
+        i= i+ self.mlp(ni)
+
+        tn=self.ln_2(t)
+        t= i+ self.mlp(tn)
+
         return x,i,t
         # return x
 
@@ -226,12 +233,14 @@ class ViT_CLIP(nn.Module):
         x = self.ln_pre(x)
 
         x = x.permute(1, 0, 2)  # NLD -> LND
-        x = self.transformer(x)
+        x,i,t = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
         x = self.ln_post(x)
         x = x[:, 0]
         x = rearrange(x, '(b t) d -> b d t',b=B,t=T)
         
         x = x.unsqueeze(-1).unsqueeze(-1)  # BDTHW for I3D head
+        i = i.unsqueeze(-1).unsqueeze(-1)
+        t= t.unsqueeze(-1).unsqueeze(-1)
 
-        return x
+        return x,i,t
