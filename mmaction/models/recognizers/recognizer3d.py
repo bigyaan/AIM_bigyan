@@ -13,6 +13,7 @@ class Recognizer3D(BaseRecognizer):
         """Defines the computation performed at every call when training."""
 
         assert self.with_cls_head
+        print(type(imgs))
         imgs = imgs.reshape((-1, ) + imgs.shape[2:])
         losses = dict()
         
@@ -20,6 +21,8 @@ class Recognizer3D(BaseRecognizer):
         if self.with_neck:
             x, loss_aux = self.neck(x, labels.squeeze())
             losses.update(loss_aux)
+        print("x",x)
+        print("x type",type(x))
 
         cls_score,I_score,t_score = self.cls_head(x)
         gt_labels_x = labels[0].squeeze()
