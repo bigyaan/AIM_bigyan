@@ -6,7 +6,7 @@ from .base import BaseRecognizer
 
 
 @RECOGNIZERS.register_module()
-class Recognizer3D(BaseRecognizer):
+class kuna (BaseRecognizer):
     """3D recognizer model framework."""
 
     def forward_train(self, imgs, labels, **kwargs):
@@ -24,13 +24,15 @@ class Recognizer3D(BaseRecognizer):
         print("x",x)
         print("x type",type(x))
 
-        cls_score,I_score,t_score = self.cls_head(x)
+        cls_score= self.cls_head(x[0])
+        i_score = self.cls_head(x[1])
+        t_score = self.cls_head(x[2])
         gt_labels_x = labels[0].squeeze()
         gt_labels_i = labels[1].squeeze()
         gt_labels_t= labels[2].squeeze()
         loss_cls_x = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
-        loss_cls_i = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
-        loss_cls_t = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
+        loss_cls_i = self.cls_head.loss(i_score, gt_labels_i, **kwargs)
+        loss_cls_t = self.cls_head.loss(t_score, gt_labels_t, **kwargs)
         loss_cls=(loss_cls_x,loss_cls_i,loss_cls_t)
         losses.update(loss_cls)
 
