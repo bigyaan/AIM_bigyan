@@ -6,7 +6,7 @@ from .base import BaseRecognizer
 
 
 @RECOGNIZERS.register_module()
-class kuna (BaseRecognizer):
+class Recognizer3D(BaseRecognizer):
     """3D recognizer model framework."""
 
     def forward_train(self, imgs, labels, **kwargs):
