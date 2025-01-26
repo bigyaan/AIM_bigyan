@@ -22,6 +22,7 @@ class Recognizer3D(BaseRecognizer):
             x, loss_aux = self.neck(x, labels.squeeze())
             losses.update(loss_aux)
         print("labels",labels)
+        print("\t"*10)
     
         cls_score= self.cls_head(x[0])
         i_score = self.cls_head(x[1])
