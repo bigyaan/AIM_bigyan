@@ -238,7 +238,18 @@ class ViT_CLIP(nn.Module):
         x = self.ln_post(x)
         x = x[:, 0]
         x = rearrange(x, '(b t) d -> b d t',b=B,t=T)
-        
+        #for i
+        i = i.permute(1, 0, 2)  # LND -> NLD
+        i = self.ln_post(i)
+        i = i[:, 0]
+        i = rearrange(i, '(b t) d -> b d t',b=B,t=T)
+        # for t
+        t= t.permute(1, 0, 2)  # LND -> NLD
+        t = self.ln_post(t)
+        t = t[:, 0]
+        t = rearrange(t, '(b t) d -> b d t',b=B,t=T)
+
+
         x = x.unsqueeze(-1).unsqueeze(-1)  # BDTHW for I3D head
         i = i.unsqueeze(-1).unsqueeze(-1)
         t= t.unsqueeze(-1).unsqueeze(-1)
