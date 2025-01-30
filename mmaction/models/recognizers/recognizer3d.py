@@ -5,6 +5,7 @@ from ..builder import RECOGNIZERS
 from .base import BaseRecognizer
 
 
+
 @RECOGNIZERS.register_module()
 class Recognizer3D(BaseRecognizer):
     """3D recognizer model framework."""
