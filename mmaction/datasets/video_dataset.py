@@ -47,14 +47,22 @@ class VideoDataset(BaseDataset):
         with open(self.ann_file, 'r') as fin:
             for line in fin:
                 line_split = line.strip().split()
-                if self.multi_class:
-                    assert self.num_classes is not None
-                    filename, label = line_split[0], line_split[1:]
-                    label = list(map(int, label))
-                else:
-                    filename, label = line_split
-                    label = int(label)
+                # if self.multi_class:
+                #     assert self.num_classes is not None
+                #     filename, label = line_split[0], line_split[1:]
+                #     label = list(map(int, label))
+                # else:
+                #     filename, label = line_split
+                #     label = int(label)
+                print("lineeeeee", line_split)
+
+                filename = line_split[0]  # First value is the filename
+
+                # Split the second value by ',' to extract three separate labels
+                action, instrument, object_label = map(int, line_split[1].split(','))
+
                 if self.data_prefix is not None:
                     filename = osp.join(self.data_prefix, filename)
-                video_infos.append(dict(filename=filename, label=label))
+                video_infos.append(dict(filename=filename,  label=(action, instrument, object_label)))
+                print("videooooooo infooooo", video_infos)
         return video_infos

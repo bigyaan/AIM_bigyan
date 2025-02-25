@@ -1,0 +1,5 @@
+python tools/train.py configs/recognition/vit/vitclip_base_sthv2.py --validate --cfg-options model.backbone.pretrained=openaiclip work_dir=work_dirs_vit_original_aim_moreepoch --resume=D:\sirjana\AIM\aim\work_dirs_vit_original_aim_moreepoch\epoch_35.pth
+
+
+
+python tools/train.py configs/recognition/vit/vitclip_base_sthv2.py --validate --cfg-options model.backbone.pretrained=openaiclip work_dir=work_dirs_vit_triplet
