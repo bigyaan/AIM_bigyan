@@ -23,6 +23,9 @@ PIPELINES = Registry('pipeline')
 BLENDINGS = Registry('blending')
 
 
+
+
+
 def build_dataset(cfg, default_args=None):
     """Build a dataset from config dict.
 
@@ -34,11 +37,19 @@ def build_dataset(cfg, default_args=None):
     Returns:
         Dataset: The constructed dataset.
     """
+    print("ccccccccccffffffffffffffffggggggggggggg", cfg)
     if cfg['type'] == 'RepeatDataset':
         from .dataset_wrappers import RepeatDataset
         dataset = RepeatDataset(
             build_dataset(cfg['dataset'], default_args), cfg['times'])
     else:
+        print("buillllllllllllllllllllllllllllll")
+        help(build_from_cfg)
+        print("buillleeeeeeeee", DATASETS)
+        print("buillleeeeeeeee", default_args)
+
+        print("buillleeeeeeeee", cfg)
+
         dataset = build_from_cfg(cfg, DATASETS, default_args)
     return dataset
 

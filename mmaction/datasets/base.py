@@ -86,6 +86,8 @@ class BaseDataset(Dataset, metaclass=ABCMeta):
 
         self.pipeline = Compose(pipeline)
         self.video_infos = self.load_annotations()
+
+        print("dddddddddddddddddddddddddddd")
         if self.sample_by_class:
             self.video_infos_by_class = self.parse_by_class()
 

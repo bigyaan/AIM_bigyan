@@ -159,12 +159,13 @@ def main():
     if len(cfg.module_hooks) > 0:
         register_module_hooks(model, cfg.module_hooks)
 
-    if cfg.omnisource:
-        # If omnisource flag is set, cfg.data.train should be a list
-        assert isinstance(cfg.data.train, list)
-        datasets = [build_dataset(dataset) for dataset in cfg.data.train]
-    else:
-        datasets = [build_dataset(cfg.data.train)]
+    # if cfg.omnisource:
+    #     # If omnisource flag is set, cfg.data.train should be a list
+    #     assert isinstance(cfg.data.train, list)
+    #     datasets = [build_dataset(dataset) for dataset in cfg.data.train]
+    # else:
+    print("8888888888888888888888888888888888888888", cfg.data.train)
+    datasets = [build_dataset(cfg.data.train)]
 
     if len(cfg.workflow) == 2:
         # For simplicity, omnisource is not compatiable with val workflow,
