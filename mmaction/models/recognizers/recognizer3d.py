@@ -11,7 +11,7 @@ class Recognizer3D(BaseRecognizer):
 
     def forward_train(self, imgs, labels, **kwargs):
         """Defines the computation performed at every call when training."""
-        print("kwwwwwwwwwaaaargggg*******", self)
+        # print("kwwwwwwwwwaaaargggg*******", self)
 
         # assert self.with_cls_head
     
@@ -22,8 +22,8 @@ class Recognizer3D(BaseRecognizer):
         if self.with_neck:
             x, loss_aux = self.neck(x, labels.squeeze())
             losses.update(loss_aux)
-        print("labels",labels.shape)
-        print("\t"*10)
+        # print("labels",labels.shape)
+        # print("\t"*10)
     
         cls_score= self.cls_head_x(x[0])
         i_score = self.cls_head_i(x[1])
@@ -31,11 +31,14 @@ class Recognizer3D(BaseRecognizer):
         gt_labels_x = labels[0].squeeze()
         gt_labels_i = labels[1].squeeze()
         gt_labels_t= labels[2].squeeze()
-        loss_cls_x = self.cls_head.loss(cls_score, gt_labels_x, **kwargs)
-        loss_cls_i = self.cls_head.loss(i_score, gt_labels_i, **kwargs)
-        loss_cls_t = self.cls_head.loss(t_score, gt_labels_t, **kwargs)
+        loss_cls_x = self.cls_head_x.loss(cls_score, gt_labels_x, **kwargs)
+        loss_cls_i = self.cls_head_i.loss(i_score, gt_labels_i, **kwargs)
+        loss_cls_t = self.cls_head_t.loss(t_score, gt_labels_t, **kwargs)
         loss_cls=(loss_cls_x,loss_cls_i,loss_cls_t)
-        losses.update(loss_cls)
+        losses.update(loss_cls_x)
+        losses.update(loss_cls_i)
+        losses.update(loss_cls_t)
+
 
         return losses
 
@@ -90,10 +93,17 @@ class Recognizer3D(BaseRecognizer):
             return feat
 
         # should have cls_head if not extracting features
-        assert self.with_cls_head
-        cls_score = self.cls_head(feat)
-        cls_score = self.average_clip(cls_score, num_segs)
-        return cls_score
+        # assert self.with_cls_head
+        cls_x_score = self.cls_head_x(feat)
+        cls_i_score = self.cls_head_i(feat)
+        cls_t_score = self.cls_head_t(feat)
+
+        cls_score_x = self.average_clip(cls_x_score, num_segs)
+        cls_score_i = self.average_clip(cls_i_score, num_segs)
+
+        cls_score_t = self.average_clip(cls_t_score, num_segs)
+
+        return cls_score_x
 
     def forward_test(self, imgs):
         """Defines the computation performed at every call when evaluation and

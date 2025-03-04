@@ -4,7 +4,11 @@ _base_ = [
 # model settings
 model = dict(
     backbone=dict(drop_path_rate=0.2, adapter_scale=1, num_tadapter=2, num_frames=8),
-    cls_head=dict(num_classes=174),
+    cls_head_x=dict(num_classes=174),
+    cls_head_i=dict(num_classes=174),
+
+    cls_head_t=dict(num_classes=174),
+
     test_cfg=dict(max_testing_views=2), 
     train_cfg=dict(blending=dict(type='LabelSmoothing', num_classes=174, smoothing=0.1)))
 
