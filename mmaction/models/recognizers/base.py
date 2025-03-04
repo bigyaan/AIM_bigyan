@@ -31,7 +31,11 @@ class BaseRecognizer(nn.Module, metaclass=ABCMeta):
 
     def __init__(self,
                  backbone,
-                 cls_head=None,
+                 cls_head_x=None,
+                cls_head_i=None,
+
+                 cls_head_t=None,
+
                  neck=None,
                  train_cfg=None,
                  test_cfg=None):
@@ -77,7 +81,12 @@ class BaseRecognizer(nn.Module, metaclass=ABCMeta):
         if neck is not None:
             self.neck = builder.build_neck(neck)
 
-        self.cls_head = builder.build_head(cls_head) if cls_head else None
+        self.cls_head_x = builder.build_head(cls_head_x) if cls_head_x else None
+
+        self.cls_head_i = builder.build_head(cls_head_i) if cls_head_i else None
+
+        self.cls_head_t = builder.build_head(cls_head_t) if cls_head_t else None
+
 
         self.train_cfg = train_cfg
         self.test_cfg = test_cfg
@@ -115,10 +124,10 @@ class BaseRecognizer(nn.Module, metaclass=ABCMeta):
         """bool: whether the recognizer has a neck"""
         return hasattr(self, 'neck') and self.neck is not None
 
-    @property
-    def with_cls_head(self):
-        """bool: whether the recognizer has a cls_head"""
-        return hasattr(self, 'cls_head') and self.cls_head is not None
+    # @property
+    # def with_cls_head(self):
+    #     """bool: whether the recognizer has a cls_head"""
+    #     return hasattr(self, 'cls_head') and self.cls_head is not None
 
     def init_weights(self):
         """Initialize the model network weights."""
@@ -133,8 +142,8 @@ class BaseRecognizer(nn.Module, metaclass=ABCMeta):
             raise NotImplementedError('Unsupported backbone source '
                                       f'{self.backbone_from}!')
 
-        if self.with_cls_head:
-            self.cls_head.init_weights()
+        # if self.with_cls_head:
+        #     self.cls_head.init_weights()
         if self.with_neck:
             self.neck.init_weights()
 

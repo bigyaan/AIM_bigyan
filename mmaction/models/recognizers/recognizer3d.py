@@ -11,8 +11,9 @@ class Recognizer3D(BaseRecognizer):
 
     def forward_train(self, imgs, labels, **kwargs):
         """Defines the computation performed at every call when training."""
+        print("kwwwwwwwwwaaaargggg*******", self)
 
-        assert self.with_cls_head
+        # assert self.with_cls_head
     
         imgs = imgs.reshape((-1, ) + imgs.shape[2:])
         losses = dict()
@@ -24,9 +25,9 @@ class Recognizer3D(BaseRecognizer):
         print("labels",labels.shape)
         print("\t"*10)
     
-        cls_score= self.cls_head(x[0])
-        i_score = self.cls_head(x[1])
-        t_score = self.cls_head(x[2])
+        cls_score= self.cls_head_x(x[0])
+        i_score = self.cls_head_i(x[1])
+        t_score = self.cls_head_t(x[2])
         gt_labels_x = labels[0].squeeze()
         gt_labels_i = labels[1].squeeze()
         gt_labels_t= labels[2].squeeze()

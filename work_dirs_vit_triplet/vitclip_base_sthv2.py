@@ -12,13 +12,26 @@ model = dict(
         adapter_scale=1,
         num_tadapter=2,
         pretrained='openaiclip'),
-    cls_head=dict(
+    cls_head_x=dict(
         type='I3DHead',
         in_channels=768,
-        num_classes=174,
+        num_classes=400,
+        spatial_type='avg',
+        dropout_ratio=0.5),
+    cls_head_i=dict(
+        type='I3DHead',
+        in_channels=768,
+        num_classes=400,
+        spatial_type='avg',
+        dropout_ratio=0.5),
+    cls_head_t=dict(
+        type='I3DHead',
+        in_channels=768,
+        num_classes=400,
         spatial_type='avg',
         dropout_ratio=0.5),
     test_cfg=dict(average_clips='prob', max_testing_views=2),
+    cls_head=dict(num_classes=174),
     train_cfg=dict(
         blending=dict(type='LabelSmoothing', num_classes=174, smoothing=0.1)))
 checkpoint_config = dict(interval=10)
