@@ -4,7 +4,6 @@ import os
 import os.path as osp
 import time
 import warnings
-
 import mmcv
 import torch
 from mmcv import Config, DictAction
@@ -20,6 +19,7 @@ from mmaction.utils import collect_env, get_root_logger, register_module_hooks
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a recognizer')
+    parser.add_argument('--iot_labels', help='iot labels path')
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
@@ -74,7 +74,14 @@ def parse_args():
 
     return args
 
-
+def IOT_labels_parser(file_path):
+    with open(file_path,"r") as f:
+        values=f.readlines()
+        values=[v.strip() for v in values]
+        values= [v.split(" ") for v in values]
+        values= torch.tensor(values)
+        return values
+    
 def main():
     args = parse_args()
 
@@ -165,6 +172,7 @@ def main():
         datasets = [build_dataset(dataset) for dataset in cfg.data.train]
     else:
         datasets = [build_dataset(cfg.data.train)]
+    
 
     if len(cfg.workflow) == 2:
         # For simplicity, omnisource is not compatiable with val workflow,
@@ -195,6 +203,16 @@ def main():
     logger.info('Number of total parameters: {}, tunable parameters: {}'.format(num_total_param, num_param))
     
     test_option = dict(test_last=args.test_last, test_best=args.test_best)
+    # train_model(
+    #     model,
+    #     datasets,
+    #     cfg,
+    #     distributed=distributed,
+    #     validate=args.validate,
+    #     test=test_option,
+    #     timestamp=timestamp,
+    #     meta=meta)
+
     train_model(
         model,
         datasets,
@@ -204,6 +222,7 @@ def main():
         test=test_option,
         timestamp=timestamp,
         meta=meta)
+
 
 
 if __name__ == '__main__':
